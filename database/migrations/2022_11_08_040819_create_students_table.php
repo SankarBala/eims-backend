@@ -16,18 +16,17 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('student_id')->unique();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('sid')->unique()->nullable();
+            $table->string('name')->nullable();
             $table->string('photo')->nullable();
+            $table->integer('branch_id')->default(0);
+            $table->integer('batch_id')->default(0);
             $table->integer('class_id')->default(0);
             $table->integer('group_id')->default(0);
+            $table->integer('section_id')->default(0);
             $table->string('password')->default(Hash::make(12345));
-            $table->string('email')->unique()->nullable();
-            $table->timestamp('email_verified_at');
-            $table->rememberToken();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

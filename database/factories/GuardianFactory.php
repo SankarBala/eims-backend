@@ -3,12 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Student>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Guardian>
  */
-class StudentFactory extends Factory
+class GuardianFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +17,11 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            'sid' => Str::random(5),
-            'name' =>Str::of(fake()->name()),
-            'photo' =>fake()->imageUrl(),
+            'name' => fake()->name(),
+            'photo' => fake()->name(),
+            'mobile' => fake()->phoneNumber(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ];
     }

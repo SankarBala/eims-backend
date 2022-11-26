@@ -2,6 +2,7 @@
 
 use App\Models\Branch;
 use App\Models\Building;
+use App\Models\Guardian;
 use App\Models\Room;
 use App\Models\Student;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,5 +22,12 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', function () {
-    return Room::get();
+//    $st = Student::with('guardians')->paginate();
+//     return dd($st->toArray());
+
+
+ $gd = Guardian::with('students')->paginate()->toArray();
+
+ return dd($gd);
+
 });

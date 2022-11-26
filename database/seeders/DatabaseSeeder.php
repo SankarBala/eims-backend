@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // BranchSeeder::class,
             // RoomSeeder::class,
-            // StudentSeeder::class,
+            StudentSeeder::class,
+            GuardianSeeder::class,
+            GuardianOfStudentSeeder::class
         ]);
     }
 }

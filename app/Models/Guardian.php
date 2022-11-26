@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Guardian extends Model
 {
     use HasFactory;
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withPivot('can_pick');
+    }
 }
