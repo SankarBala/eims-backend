@@ -20,7 +20,7 @@ class RoomSeeder extends Seeder
         $buildings = Building::all();
 
         foreach ($buildings as $building) {
-            for ($room = 1; $room <= 25; $room++) {
+            for ($room = 1; $room <= 2000; $room++) {
                 Room::create([
                     "branch_id" => $building->branch->id,
                     "building_id" => $building->id,

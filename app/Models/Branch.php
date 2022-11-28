@@ -9,6 +9,10 @@ class Branch extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'phones' => 'array',
+    ];
+
     public function buildings()
     {
         return $this->hasMany(Building::class);

@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            // BranchSeeder::class,
-            // RoomSeeder::class,
-            StudentSeeder::class,
-            GuardianSeeder::class,
-            GuardianOfStudentSeeder::class
+            BranchSeeder::class,
+            RoomSeeder::class,
+            // StudentSeeder::class,
+            // GuardianSeeder::class,
+            // GuardianOfStudentSeeder::class
         ]);
     }
 }

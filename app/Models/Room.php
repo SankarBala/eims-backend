@@ -10,6 +10,17 @@ class Room extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'ready' => 'string',
+    ];
+
+    // protected $attributes = [
+    //     'width' => "Blank",
+    //     'height' => "Blank",
+    //     'length' => "Blank",
+    //     'ffff' => "Blank",
+    // ];
+
     protected $hidden = ["deleted_at"];
 
     public function branch()

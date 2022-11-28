@@ -20,7 +20,7 @@ class BranchSeeder extends Seeder
             'slug' => 'dhaka-international-school',
             'code' => 'dis',
             'address' => 'Dhaka City, Dhaka-1000, Bangladesh',
-            'phone' => '["01742725606", "01531827045"]',
+            'phones' => ["01742725606", "01531827045"],
             'email' => 'dhaka@ins.com',
         ]);
         Branch::create([
@@ -28,7 +28,7 @@ class BranchSeeder extends Seeder
             'slug' => 'barisal-international-school',
             'code' => 'bis',
             'address' => 'Barisal',
-            'phone' => '["01742725606", "01531827045"]',
+            'phones' => ["01742725606", "01531827045"],
             'email' => 'barisal@ins.com',
         ]);
         Branch::create([
@@ -36,7 +36,7 @@ class BranchSeeder extends Seeder
             'slug' => 'khulna-international-school',
             'code' => 'kis',
             'address' => 'Khulna',
-            'phone' => '["01742725606", "01531827045"]',
+            'phones' => ["01742725606", "01531827045"],
             'email' => 'khulna@ins.com',
         ]);
         Branch::create([
@@ -44,7 +44,7 @@ class BranchSeeder extends Seeder
             'slug' => 'chittagoan-international-school',
             'code' => 'cis',
             'address' => 'Chittagaon',
-            'phone' => '["01742725606", "01531827045"]',
+            'phones' => ["01742725606", "01531827045"],
             'email' => 'chittagaon@ins.com',
         ]);
     }

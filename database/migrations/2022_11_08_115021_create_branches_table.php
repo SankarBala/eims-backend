@@ -17,14 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique()->nullable();
             $table->string('slug')->unique()->nullable();
-            $table->string('code')->unique()->nullable();
+            $table->string('code', 50)->unique()->nullable();
             $table->string('eiin', 10)->default(0);
             $table->string('address')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phones')->nullable();
             $table->string('email', 100)->nullable();
             $table->enum('status', ['planned', 'registered', 'postponed', 'running'])->default('running');
-            $table->softDeletes('deleted_at');
             $table->timestamps();
+            $table->softDeletes('deleted_at');
         });
     }
 
