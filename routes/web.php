@@ -3,7 +3,7 @@
 use App\Models\Room;
 use App\Services\ExcelService\Facades\SuperExcel;
 use Illuminate\Support\Facades\Route;
-
+use Maatwebsite\Excel\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,22 +19,47 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 
 
-    $rooms = Room::paginate(800);
+    $room = Room::paginate();
 
-    $excel = SuperExcel::open();
+
+    $excel = SuperExcel::open("hello.xlsx");
+
+
     $sheet = $excel->getActiveSheet();
 
-    foreach ($rooms as $row => $rowdata) {
-        $column = 1;
-        foreach ($rowdata->toArray() as $col => $coldata) {
-            $sheet->setCellValue(to_alpha($column) . ($row + 1), $coldata);
-            $column++;
-        }
-    }
+    dd(SuperExcel::getData($sheet));
+
+    $rooms = [
+        [1, 2, 3],
+        [1, 2, 3],
+        [1, 2, 3],
+        [
+            1, 2, [
+                1, 2, 3, [
+                    1, 2, $room
+                ]
+            ]
+        ],
+    ];
+
+
+    dd(SuperExcel::insert($sheet, $rooms));
 
 
 
-    SuperExcel::save($excel, "room.xlsx");
 
-    return "done";
+
+    // foreach ($rooms as $row => $rowdata) {
+    //     $column = 1;
+    //     foreach ($rowdata->toArray() as $col => $coldata) {
+    //         $sheet->setCellValue(to_alpha($column) . ($row + 1), $coldata);
+    //         $column++;
+    //     }
+    // }
+
+
+
+    // SuperExcel::save($excel, "roomss.xlsx");
+
+    dd($excel->getProperties());
 });
