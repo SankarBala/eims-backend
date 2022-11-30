@@ -2,6 +2,9 @@
 
 namespace App\Services\ExcelService;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ExcelReader;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -28,8 +31,17 @@ class SuperExcel
         return $spreadsheet;
     }
 
-    public function getData(Worksheet $worksheet){
-           return $worksheet->toArray();
+    public function get(Worksheet $worksheet)
+    {
+        return new Collection($worksheet->toArray(null, true, true, false));
+    }
+
+    public function paginate($data, $per_page = 15)
+    {
+        $data = new Collection($data->toArray(null, true, true, false));
+        $paginator = new Paginator($data, $per_page);
+        $paginator->total = count($data);
+        return $paginator;
     }
 
     public function saveAs(Spreadsheet $spreadsheet, String $file_name)

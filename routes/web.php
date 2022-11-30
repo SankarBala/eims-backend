@@ -2,9 +2,10 @@
 
 use App\Models\Room;
 use App\Services\ExcelService\Facades\SuperExcel;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Excel;
-
+use Illuminate\Pagination\Paginator;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,48 +19,19 @@ use Maatwebsite\Excel\Excel;
 
 Route::get('/', function () {
 
-
-    $room = Room::paginate();
-
-
     $excel = SuperExcel::open("hello.xlsx");
-
-
     $sheet = $excel->getActiveSheet();
 
-    dd(SuperExcel::getData($sheet));
+    // dd(Room::paginate(20));
+    $data = SuperExcel::get($sheet);
 
-    $rooms = [
-        [1, 2, 3],
-        [1, 2, 3],
-        [1, 2, 3],
-        [
-            1, 2, [
-                1, 2, 3, [
-                    1, 2, $room
-                ]
-            ]
-        ],
-    ];
+    // dd($data);
+    // dd($data);
 
-
-    dd(SuperExcel::insert($sheet, $rooms));
+    //    dd(new Paginator($data, 2));
 
 
 
-
-
-    // foreach ($rooms as $row => $rowdata) {
-    //     $column = 1;
-    //     foreach ($rowdata->toArray() as $col => $coldata) {
-    //         $sheet->setCellValue(to_alpha($column) . ($row + 1), $coldata);
-    //         $column++;
-    //     }
-    // }
-
-
-
-    // SuperExcel::save($excel, "roomss.xlsx");
-
-    dd($excel->getProperties());
+    // dd($col);
+    dd(SuperExcel::paginate($data, 10));
 });
