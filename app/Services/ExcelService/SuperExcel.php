@@ -2,6 +2,7 @@
 
 namespace App\Services\ExcelService;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -12,11 +13,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as ExcelWriter;
 
 class SuperExcel
 {
-
-    public function __construct()
-    {
-        //
-    }
+    protected $header = [0, 1];
+    protected $subHeader = 2;
 
     public function open(String $file_name = null)
     {
@@ -31,27 +29,52 @@ class SuperExcel
         return $spreadsheet;
     }
 
+
+    public function makeHeader(Worksheet $data, $keyRow)
+    {
+        $data = $data->toArray();
+        $keys = collect(array_splice($data,  $this->header[0], $this->header[1])[0]);
+
+        if ($this->subHeader != null) {
+            array_shift($data);
+        }
+
+        $values = $data;
+        $result = [];
+
+        foreach ($values as $key => $value) {
+            array_push($result,  $keys->combine($value));
+        }
+
+        return $result;
+    }
+
     public function get(Worksheet $worksheet)
     {
         return new Collection($worksheet->toArray(null, true, true, false));
     }
 
-    public function paginate($data, $per_page = 15)
+    public function find(Worksheet $worksheet, Int $row)
     {
-        $data = new Collection($data->toArray(null, true, true, false));
-        $paginator = new Paginator($data, $per_page);
-        $paginator->total = count($data);
-        return $paginator;
+        // return new Collection($worksheet->toArray(null, true, true, false));
+
+        $keys =  $worksheet->toArray()[0];
+        $values = $worksheet->toArray()[$row];
+
+        $result = [];
+
+        foreach ($keys as $key => $value) {
+            $result[$value] = $values[$key];
+        }
+
+        return $result;
     }
+
+
+
 
     public function saveAs(Spreadsheet $spreadsheet, String $file_name)
     {
-        // if ($file_name == null) {
-        //     if (!property_exists($spreadsheet, 'name')) {
-        //         $file_name = "New_Excel_Worksheet_" . time() . "_" . rand() . ".xlsx";
-        //     }
-        //     $file_name = $spreadsheet->name;
-        // }
         $writer = new ExcelWriter($spreadsheet);
         $writer->save($file_name);
         return $spreadsheet;
@@ -83,5 +106,26 @@ class SuperExcel
         $sheet =  self::add($sheet, $data);
         self::save($sheet->getParent());
         return $sheet;
+    }
+
+    public static function paginate(Collection $collection, $pageSize = 15)
+    {
+        $page = Paginator::resolveCurrentPage('page');
+        $total = $collection->count();
+        return self::paginator($collection->forPage($page, $pageSize), $total, $pageSize, $page, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => 'page'
+        ]);
+    }
+
+    protected static function paginator($items, $total, $perPage, $currentPage, $options)
+    {
+        return Container::getInstance()->makeWith(LengthAwarePaginator::class, compact(
+            'items',
+            'total',
+            'perPage',
+            'currentPage',
+            'options'
+        ));
     }
 }

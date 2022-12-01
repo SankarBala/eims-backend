@@ -2,10 +2,13 @@
 
 use App\Models\Room;
 use App\Services\ExcelService\Facades\SuperExcel;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Pagination\Paginator;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,17 +24,21 @@ Route::get('/', function () {
 
     $excel = SuperExcel::open("hello.xlsx");
     $sheet = $excel->getActiveSheet();
+    // $sheet = $excel->createSheet();
+    // $sheet->setTitle("newSheetthis");
+    // $sheet=$sheet->setSheetName("fff");
 
-    // dd(Room::paginate(20));
-    $data = SuperExcel::get($sheet);
+    // SuperExcel::save($excel);
 
-    // dd($data);
-    // dd($data);
+    //    $sheet = new Worksheet();
+    //     dd($sheet->title);
 
-    //    dd(new Paginator($data, 2));
+    // dd(Room::find(2));
+
+    // dd(SuperExcel::makeHeader($sheet, 1));
+    // dd($sheet);
 
 
 
-    // dd($col);
-    dd(SuperExcel::paginate($data, 10));
+    dd(SuperExcel::get($sheet));
 });
