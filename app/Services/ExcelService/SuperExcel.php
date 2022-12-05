@@ -13,8 +13,14 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as ExcelWriter;
 
 class SuperExcel
 {
-    protected $header = [0, 1];
-    protected $subHeader = 2;
+    protected $header = [1, 2];
+    protected $subHeader = null;
+    public $spreadsheet;
+    public $worksheet;
+
+    public function __construct()
+    {
+    }
 
     public function open(String $file_name = null)
     {
@@ -26,19 +32,45 @@ class SuperExcel
             $spreadsheet = $spreadsheet->load($file_name);
         }
         $spreadsheet->name = $file_name;
-        return $spreadsheet;
+        $this->spreadsheet = $spreadsheet;
+        $this->worksheet =  $this->spreadsheet->getActiveSheet();
+        return $this;
     }
 
 
-    public function makeHeader(Worksheet $data, $keyRow)
+    public function useSheet(String $sheetName = null)
+    {
+        if ($sheetName !== null) {
+            $this->spreadsheet->setActiveSheetIndexByName($sheetName);
+            $this->worksheet =  $this->spreadsheet->getActiveSheet();
+        }
+        return $this;
+    }
+
+    public function useSheetByIndex(Int $sheetIndex = null)
+    {
+        if ($sheetIndex !== null) {
+            $this->spreadsheet->setActiveSheetIndex($sheetIndex);
+            $this->worksheet =  $this->spreadsheet->getActiveSheet();
+        }
+        return $this;
+    }
+
+    public function createSheet(String $sheetName = null)
+    {
+        $newSheet =  $this->spreadsheet->createSheet();
+        if ($sheetName !== null) {
+            $newSheet->setTitle($sheetName);
+        }
+        return $this->useSheet($newSheet->getTitle());
+    }
+
+
+
+    public function makeHeader(Worksheet $data, $keyRow = 1)
     {
         $data = $data->toArray();
-        $keys = collect(array_splice($data,  $this->header[0], $this->header[1])[0]);
-
-        if ($this->subHeader != null) {
-            array_shift($data);
-        }
-
+        $keys = collect(array_splice($data, 0, 1)[0]);
         $values = $data;
         $result = [];
 
@@ -49,9 +81,10 @@ class SuperExcel
         return $result;
     }
 
-    public function get(Worksheet $worksheet)
+    public static function get()
     {
-        return new Collection($worksheet->toArray(null, true, true, false));
+        // return new Collection($this->worksheet->toArray(null, true, true, false));
+        return "fff";
     }
 
     public function find(Worksheet $worksheet, Int $row)
@@ -73,18 +106,33 @@ class SuperExcel
 
 
 
-    public function saveAs(Spreadsheet $spreadsheet, String $file_name)
+    // public function saveAs(Spreadsheet $spreadsheet, String $file_name)
+    // {
+    //     $writer = new ExcelWriter($spreadsheet);
+    //     $writer->save($file_name);
+    //     return $spreadsheet;
+    // }
+
+
+    // public function save(Spreadsheet $spreadsheet)
+    // {
+    //     return self::saveAs($spreadsheet, $spreadsheet->name);
+    // }
+
+    public function saveAs(String $file_name)
     {
-        $writer = new ExcelWriter($spreadsheet);
+        $writer = new ExcelWriter($this->spreadsheet);
         $writer->save($file_name);
-        return $spreadsheet;
+        return $this;
     }
 
 
-    public function save(Spreadsheet $spreadsheet)
+    public function save()
     {
-        return self::saveAs($spreadsheet, $spreadsheet->name);
+        return self::saveAs($this->spreadsheet->name);
     }
+
+
 
 
     public function add(Worksheet $sheet, array $data)
